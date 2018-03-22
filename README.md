@@ -1,2 +1,2 @@
 # SHT30Thing
-A simple SHT30 temperature / humidity sensor thing for MQTT.
+A SHT30 temperature / humidity sensor thing communicating over secure MQTT.

@@ -2,7 +2,7 @@
 #include <BlinkPattern.h>
 #include <WEMOS_SHT3X.h>
 
-using namespace g3rb3n;
+using namespace ootb;
 
 Thing thing;
 BlinkPattern led(BUILTIN_LED);
@@ -14,42 +14,42 @@ BlinkPattern::Pattern<2> normal{{1,39},25};
 
 void setup()
 {
-  Serial.begin(230400);
-  Serial.println();
-  Serial.println("Client:" + thing.clientId());
+    Serial.begin(230400);
+    Serial.println();
+    Serial.println("Client:" + thing.clientId());
 
-  led.setPattern(start);
+    led.setPattern(start);
 
-  thing.onStateChange([](const String& msg){
-    Serial.println(msg);
-  });
+    thing.onStateChange([](const String& msg){
+        Serial.println(msg);
+    });
 
-  thing.begin();
+    thing.begin();
 
-  thing.addSensor(thing.clientId() + "/sht30/humidity", 5000, [](Value& value){
-    sht30.get();
-    float humidity = sht30.humidity;
-    Serial.println(String("Read humidity ") + humidity);
-    led.setPattern(normal);
-    value = humidity;
-  });
+    thing.addSensor("sht30/humidity" + thing.clientId(), 5000, [](Value& value){
+        sht30.get();
+        float humidity = sht30.humidity;
+        Serial.println(String("Read humidity ") + humidity);
+        led.setPattern(normal);
+        value = humidity;
+    });
 
-  thing.addSensor(thing.clientId() + "/sht30/temperature", 5000, [](Value& value){
-    sht30.get();
-    float temperature = sht30.cTemp;
-    Serial.println(String("Read temperature ") + temperature);
-    led.setPattern(normal);
-    value = temperature;
-  });
+    thing.addSensor("sht30/temperature" + thing.clientId(), 5000, [](Value& value){
+        sht30.get();
+        float temperature = sht30.cTemp;
+        Serial.println(String("Read temperature ") + temperature);
+        led.setPattern(normal);
+        value = temperature;
+    });
 
-  thing.addActuator(thing.clientId() + "/sht30/display", [](Value& value){
-    Serial.println("Got " + String(value));
-  });
+    thing.addActuator(thing.clientId() + "/sht30/display", [](Value& value){
+        Serial.println("Got " + String(value));
+    });
 
 }
 
 void loop()
 {
-  thing.handle();
-  led.handle();
+    thing.handle();
+    led.handle();
 }
